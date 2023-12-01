@@ -9,7 +9,14 @@ int serial_putc(char c, FILE *)
   Serial.write(c);
 
   return c;
-} 
+}
+
+/*
+at 50cm Z, -10cm Y
+the width is 48cm
+w = 160, h = 120
+*/
+
 
 OpenMV camera;
 AprilTagDatum tag;
