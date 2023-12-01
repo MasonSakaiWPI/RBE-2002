@@ -2,6 +2,14 @@
 #include <Romi32U4.h>
 #include "openmv.h"
 #include "apriltagdatum.h"
+# include <stdio.h>
+
+int serial_putc(char c, FILE *) 
+{
+  Serial.write(c);
+
+  return c;
+} 
 
 OpenMV camera;
 AprilTagDatum tag;
@@ -56,6 +64,10 @@ void controlRobot(float distanceToTag, float radsFromCenter) {
   float u_left = u_dist - u_turn;
   float u_right = u_dist + u_turn;
 
+  printf("dist: %8.4f, %8.4f, %8.4f, %8.4f\n", distanceToTag, e_dist, E_dist, u_dist);
+  printf("turn: %8.4f, %8.4f, %8.4f, %8.4f\n", radsFromCenter, e_turn, E_turn, u_turn);
+  printf("effs: %8.4f, %8.4f, %8.4f, %8.4f\n\n", u_dist, u_turn, u_left, u_right);
+
   motors.setEfforts(u_left,u_right);
 }
 
@@ -64,6 +76,7 @@ void setup() {
   Wire.setClock(100000ul);
 
   Serial.begin(7200);
+  fdevopen(&serial_putc, 0);
 
   motors.init();
 }
