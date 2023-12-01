@@ -81,17 +81,20 @@ void setup() {
   motors.init();
 }
 
+long lastSeen = 0;
+
 void loop() {
 
   if(camera.getTagCount() > 0) {
     camera.readTag(tag);
 
     float dist = DistanceToTag(tag);
-    Serial.println(dist);
-    delay(100);
     float turn = 0;//(tag.cx - 60);
 
-    //controlRobot(dist, turn);
+    controlRobot(dist, turn);
+
+    lastSeen = millis();
+    //delay(100);
     
     // Serial.print("Header: ");
     // Serial.println(tag.header);
@@ -111,6 +114,8 @@ void loop() {
 
     // delay(1000);
   }
-  else motors.setEfforts(0, 0);
+  else if(millis() - lastSeen > 500) {
+    motors.setEfforts(0, 0);
+  }
 
 }
