@@ -16,11 +16,11 @@ AprilTagDatum tag;
 Romi32U4Motors motors;
 
 const float desiredDistance = 20; //cm
-const float kp_dist = 50, kd_dist = 5;
+const float kp_dist = 30, kd_dist = 15;
 const float tagDistRatio = 20/40; //cm per pixel
 
 const int desiredPixX = 60;
-const float kp_turn = 50, kd_turn = 5;
+const float kp_turn = 50, kd_turn = 25;
 
 // const float tagRealWidth = 4.4f; //cm
 // const float tagTargetPxWidth = 40;
@@ -52,6 +52,9 @@ float lastDist, lastTurn;
 void controlRobot(float distanceToTag, float radsFromCenter) {
 
   float e_dist = distanceToTag - desiredDistance;
+  if(e_dist > 20) e_dist = 20;
+  else if(e_dist < -20) e_dist = -20;
+
   float E_dist = e_dist - lastDist;
   lastDist = e_dist;
   float u_dist = kp_dist * e_dist + kd_dist * E_dist;
@@ -64,9 +67,11 @@ void controlRobot(float distanceToTag, float radsFromCenter) {
   float u_left = u_dist - u_turn;
   float u_right = u_dist + u_turn;
 
-  printf("dist: %8.4f, %8.4f, %8.4f, %8.4f\n", distanceToTag, e_dist, E_dist, u_dist);
-  printf("turn: %8.4f, %8.4f, %8.4f, %8.4f\n", radsFromCenter, e_turn, E_turn, u_turn);
-  printf("effs: %8.4f, %8.4f, %8.4f, %8.4f\n\n", u_dist, u_turn, u_left, u_right);
+  //printf("dist: %8.4f, %8.4f, %8.4f, %8.4f\n", distanceToTag, e_dist, E_dist, u_dist);
+  //printf("turn: %8.4f, %8.4f, %8.4f, %8.4f\n", radsFromCenter, e_turn, E_turn, u_turn);
+  //printf("effs: %8.4f, %8.4f, %8.4f, %8.4f\n\n", u_dist, u_turn, u_left, u_right);
+
+  Serial.println();
 
   motors.setEfforts(u_left,u_right);
 }
@@ -114,7 +119,7 @@ void loop() {
 
     // delay(1000);
   }
-  else if(millis() - lastSeen > 500) {
+  else if(millis() - lastSeen > 100) {
     motors.setEfforts(0, 0);
   }
 
