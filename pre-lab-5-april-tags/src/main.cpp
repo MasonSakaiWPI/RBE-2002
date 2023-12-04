@@ -23,11 +23,11 @@ AprilTagDatum tag;
 Romi32U4Motors motors;
 
 const float desiredDistance = 20; //cm
-const float kp_dist = 30, kd_dist = 15;
+const float kp_dist = 20, kd_dist = 10;
 const float tagDistRatio = 20/40; //cm per pixel
 
-const int desiredPixX = 60;
-const float kp_turn = 50, kd_turn = 25;
+const int desiredPixX = 80;
+const float kp_turn = 200, kd_turn = 100;
 
 // const float tagRealWidth = 4.4f; //cm
 // const float tagTargetPxWidth = 40;
@@ -57,10 +57,13 @@ float DistanceToTag(AprilTagDatum& tag){
 float const a = .006f;
 
 float AngleToTag(AprilTagDatum& tag, float distance) {
-  float x = a * tag.cx;
-  float y = a * tag.cy;
+
+  float x = a * (desiredPixX - (int16_t)tag.cx);
+  //float y = a * tag.cy - 60;
   float z = 1.0f;
   
+  float angle = atan(x/z);
+  return angle;
 }
 
 float lastDist, lastTurn;
@@ -110,7 +113,7 @@ void loop() {
     camera.readTag(tag);
 
     float dist = DistanceToTag(tag);
-    float turn = 0;//(tag.cx - 60);
+    float turn = AngleToTag(tag, dist);
 
     controlRobot(dist, turn);
 
