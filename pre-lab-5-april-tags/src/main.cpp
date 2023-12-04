@@ -54,7 +54,12 @@ float DistanceToTag(AprilTagDatum& tag){
     return theDistanceToTag;
 }
 
+float const a = .006f;
+
 float AngleToTag(AprilTagDatum& tag, float distance) {
+  float x = a * tag.cx;
+  float y = a * tag.cy;
+  float z = 1.0f;
   
 }
 
