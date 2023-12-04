@@ -54,6 +54,10 @@ float DistanceToTag(AprilTagDatum& tag){
     return theDistanceToTag;
 }
 
+float AngleToTag(AprilTagDatum& tag, float distance) {
+  
+}
+
 float lastDist, lastTurn;
 
 void controlRobot(float distanceToTag, float radsFromCenter) {
