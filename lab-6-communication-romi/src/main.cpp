@@ -3,11 +3,17 @@
 #include "Ultrasonic.h"
 #include "IR_sensor.h"
 #include "IMU.h"
+#include "OpenMV.h"
+
 
 Button buttonA(14);
 Ultrasonic sonar;
 IRsensor ir;
 IMU_sensor imu_sensor;
+OpenMV camera;
+AprilTagDatum tag;
+Romi32U4Motors motors;
+
 
 /**
  * sendMessage creates a string of the form
@@ -41,17 +47,22 @@ void setup()
     Serial.begin(115200);
     delay(100);  //give it a moment to bring up the Serial
 
-    sonar.setup();
-    sonar.start();
-    ir.Init();
-    imu_sensor.Init();
+    //sonar.setup();
+    //sonar.start();
+    //ir.Init();
+    //imu_sensor.Init();
 
     Serial.println("setup()");
 
     Serial1.begin(115200);
     digitalWrite(0, HIGH); // Set internal pullup on RX1 to avoid spurious signals
-
     buttonA.init();
+    Wire.begin();
+    Wire.setClock(100000ul);
+
+    //fdevopen(&serial_putc, 0);
+
+    motors.init();
 
     Serial.println("/setup()");
 }
@@ -72,12 +83,16 @@ void loop()
         lastSend = currTime;
         //sendMessage("timer/time", String(currTime));
 
-        sendMessage("sonar/active", String(sonar.isActive()));
-        sendMessage("sonar/distance", String(sonar.getDistance()));
+        if(camera.getTagCount() > 0) {
+            sendMessage("camera", String(camera.readTag(tag)));
+        }
 
-        sendMessage("irsensor", String(ir.ReadData()));
+        //sendMessage("sonar/active", String(sonar.isActive()));
+        //sendMessage("sonar/distance", String(sonar.getDistance()));
+
+        //sendMessage("irsensor", String(ir.ReadData()));
         
-        sendMessage("imu/z", String(imu_sensor.ReadAcceleration().Z));
+        //sendMessage("imu/z", String(imu_sensor.ReadAcceleration().Z));
     }
 
     // Check to see if we've received anything
