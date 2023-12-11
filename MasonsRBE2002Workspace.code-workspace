@@ -1,0 +1,35 @@
+{
+	"folders": [
+		{
+			"path": "lab-1-velocity-control-student-master"
+		},
+		{
+			"path": "lab-2-wall-follower-student-master"
+		},
+		{
+			"name": "lab-3-collision-detection-student-master",
+			"path": "lab-3-collision-detection-student-master"
+		},
+		{
+			"name": "lab-4-forward-kinematics-student-master",
+			"path": "lab-4-forward-kinematics-student-master"
+		},
+		{
+			"name": "pre-lab-5-april-tags",
+			"path": "pre-lab-5-april-tags"
+		},
+		{
+			"name": "pre-lab-6-communication",
+			"path": "pre-lab-6-communication"
+		},
+		{
+			"name": "lab-6-communication-romi",
+			"path": "lab-6-communication-romi"
+		},
+		{
+			"name": "lab-6-communication-esp32",
+			"path": "lab-6-communication-esp32"
+		}
+	],
+	"settings": {}
+}
