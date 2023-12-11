@@ -1,15 +1,9 @@
 #include <Arduino.h>
 #include <Button.h>
-#include "Ultrasonic.h"
-#include "IR_sensor.h"
-#include "IMU.h"
-#include "OpenMV.h"
+#include "openmv.h"
 
 
-Button buttonA(14);
-Ultrasonic sonar;
-IRsensor ir;
-IMU_sensor imu_sensor;
+Button buttonA(14); 
 OpenMV camera;
 AprilTagDatum tag;
 Romi32U4Motors motors;
@@ -25,6 +19,9 @@ void sendMessage(const String& topic, const String& message)
     Serial1.println(topic + String(':') + message);
 }
 
+/**
+ * checkSerial1 checks the first Serial line for a new line
+*/
 String serString1;
 bool checkSerial1(void)
 {
@@ -47,21 +44,14 @@ void setup()
     Serial.begin(115200);
     delay(100);  //give it a moment to bring up the Serial
 
-    //sonar.setup();
-    //sonar.start();
-    //ir.Init();
-    //imu_sensor.Init();
-
     Serial.println("setup()");
 
-    Serial1.begin(115200);
+    //Initialize the button and camera
+    Serial1.begin(115200); //Match with ESP32
     digitalWrite(0, HIGH); // Set internal pullup on RX1 to avoid spurious signals
-    buttonA.init();
-    Wire.begin();
+    buttonA.init(); 
+    Wire.begin();  //initialize the camera
     Wire.setClock(100000ul);
-
-    //fdevopen(&serial_putc, 0);
-
     motors.init();
 
     Serial.println("/setup()");
@@ -81,18 +71,12 @@ void loop()
     if(currTime - lastSend >= 500) //send every five seconds
     {
         lastSend = currTime;
-        //sendMessage("timer/time", String(currTime));
 
-        if(camera.getTagCount() > 0) {
-            sendMessage("camera", String(camera.readTag(tag)));
+        if(camera.getTagCount() > 0) { //if a tag is detected
+            camera.readTag(tag); //read tag from the camera
+            sendMessage("tag0/x", tag.cx); //send the server the tag 0 x=coordinates
+            sendMessage("tag0/y", tag.cy); //send the server the tag 0 y-coordinates
         }
-
-        //sendMessage("sonar/active", String(sonar.isActive()));
-        //sendMessage("sonar/distance", String(sonar.getDistance()));
-
-        //sendMessage("irsensor", String(ir.ReadData()));
-        
-        //sendMessage("imu/z", String(imu_sensor.ReadAcceleration().Z));
     }
 
     // Check to see if we've received anything

@@ -23,12 +23,16 @@
 			"path": "pre-lab-6-communication"
 		},
 		{
-			"name": "lab-6-communication-romi",
-			"path": "lab-6-communication-romi"
-		},
-		{
 			"name": "lab-6-communication-esp32",
 			"path": "lab-6-communication-esp32"
+		},
+		{
+			"name": "lab-6-communication-romi-sensor",
+			"path": "lab-6-communication-romi-sensor"
+		},
+		{
+			"name": "lab-6-communication-romi-eits",
+			"path": "lab-6-communication-romi-eits"
 		}
 	],
 	"settings": {}
